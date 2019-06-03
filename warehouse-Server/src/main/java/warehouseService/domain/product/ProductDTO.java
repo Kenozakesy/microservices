@@ -2,16 +2,16 @@ package warehouseService.domain.product;
 
 public class ProductDTO {
 
-    private Long id;
+    private long id;
     private String name;
     private String price;
     private int maxAmount;
     private int amount;
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

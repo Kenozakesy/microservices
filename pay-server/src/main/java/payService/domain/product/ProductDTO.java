@@ -1,37 +1,12 @@
-package warehouseService.domain.product;
+package payService.domain.product;
 
+public class ProductDTO {
 
-import javax.persistence.*;
-
-@Entity
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(nullable=false, length=128)
     private String name;
-
-    @Column(nullable=false, length=128)
     private String price;
-
-    @Column(nullable=false, length=128)
     private int maxAmount;
-
-    @Column(nullable=false, length=128)
     private int amount;
-
-    public Product() {
-    }
-
-    public Product(ProductDTO dto) {
-        this.id = dto.getId();
-        this.name = dto.getName();
-        this.price = dto.getPrice();
-        this.maxAmount = dto.getMaxAmount();
-        this.amount = dto.getAmount();
-    }
 
     public long getId() {
         return id;
@@ -70,7 +45,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "ProductDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price='" + price + '\'' +

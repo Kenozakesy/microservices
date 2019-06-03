@@ -1,7 +1,8 @@
-package warehouseService.repositories;
+package payService.repositories;
 
-import org.springframework.stereotype.Repository;
-import warehouseService.domain.product.Product;
+
+import payService.domain.product.Product;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

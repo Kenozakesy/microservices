@@ -1,18 +1,15 @@
-package warehouseService.controllers;
+package payService.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import warehouseService.domain.payment.Payment;
-import warehouseService.domain.product.Product;
-import warehouseService.domain.product.ProductDTO;
-import warehouseService.repositories.ProductRepo;
+import payService.domain.product.Product;
+import payService.domain.product.ProductDTO;
+import payService.repositories.ProductRepo;
 
-import javax.validation.Valid;
 import java.util.List;
-
 
 @RestController
 @Transactional
@@ -63,22 +60,6 @@ public class ProductController {
     public ResponseEntity<String> save(@RequestBody ProductDTO dto) { //does not work (detached entity)
         Product product = new Product(dto);
         productRepo.save(product);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/stock")
-    @ResponseBody()
-    public ResponseEntity<String> reduceStock(@RequestBody Payment payment) { //does not work (detached entity)
-
-        Product product = productRepo.find(payment.getProductId());
-        product.setAmount(product.getAmount() - payment.getAmount());
-
-        double procent = (double) product.getAmount() / product.getMaxAmount() * 100;
-        if(procent <= 20) {
-            //order new product
-            return ResponseEntity.ok().header("test").body("send new order");
-        }
-        productRepo.update(product);
         return ResponseEntity.ok().build();
     }
 

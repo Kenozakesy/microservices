@@ -1,25 +1,13 @@
-package warehouseService.domain.product;
-
+package payService.domain.product;
 
 import javax.persistence.*;
 
-@Entity
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(nullable=false, length=128)
     private String name;
-
-    @Column(nullable=false, length=128)
     private String price;
-
-    @Column(nullable=false, length=128)
     private int maxAmount;
-
-    @Column(nullable=false, length=128)
     private int amount;
 
     public Product() {
