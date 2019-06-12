@@ -79,6 +79,7 @@ public class ProductController {
 
         if(procent <= 20) {
             //order new product
+            restTemplate.postForObject("http://order-service/product/stock", payment, Payment.class);
         }
     }
 

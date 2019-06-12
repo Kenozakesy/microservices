@@ -1,4 +1,4 @@
-package orderService.orderServer;
+package orderService.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

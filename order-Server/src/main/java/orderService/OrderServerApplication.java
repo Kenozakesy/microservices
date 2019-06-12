@@ -1,4 +1,4 @@
-package payService;
+package orderService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,12 +6,10 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-import payService.repositories.PaymentRepo;
-import payService.repositories.ProductRepo;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class PayServerApplication {
+public class OrderServerApplication {
 
 	@Bean
 	@LoadBalanced
@@ -19,18 +17,8 @@ public class PayServerApplication {
 		return new RestTemplate();
 	}
 
-	@Bean
-	public ProductRepo getProductRepo() {
-		return new ProductRepo();
-	}
-
-	@Bean
-	public PaymentRepo getPaymentRepo() {
-		return new PaymentRepo();
-	}
-
 	public static void main(String[] args) {
-		SpringApplication.run(PayServerApplication.class, args);
+		SpringApplication.run(OrderServerApplication.class, args);
 	}
 
 }
