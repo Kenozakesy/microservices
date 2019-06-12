@@ -14,9 +14,9 @@ public class ProductRepo {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(Product product) { //not the best solution but manage able
-        em.merge(product);
-        //em.persist(product);
+    public void save(Product product) {
+        //em.merge(product);
+        em.persist(product);
     }
 
     public Product find(long id) {

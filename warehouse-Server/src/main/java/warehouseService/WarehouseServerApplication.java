@@ -21,11 +21,9 @@ public class WarehouseServerApplication {
 	}
 
 	@Bean
-	public ProductRepo getProductRepo() {
+	public ProductRepo getProductRepo() { //this causes entity state problems
 		return new ProductRepo();
 	}
-
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(WarehouseServerApplication.class, args);

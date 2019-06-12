@@ -10,6 +10,8 @@ import warehouseService.domain.product.Product;
 import warehouseService.domain.product.ProductDTO;
 import warehouseService.repositories.ProductRepo;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -68,18 +70,16 @@ public class ProductController {
 
     @PostMapping("/stock")
     @ResponseBody()
-    public ResponseEntity<String> reduceStock(@RequestBody Payment payment) { //does not work (detached entity)
-
+    public void reduceStock(@RequestBody Payment payment) { //does not work (detached entity)
         Product product = productRepo.find(payment.getProductId());
         product.setAmount(product.getAmount() - payment.getAmount());
 
         double procent = (double) product.getAmount() / product.getMaxAmount() * 100;
+        productRepo.update(product);
+
         if(procent <= 20) {
             //order new product
-            return ResponseEntity.ok().header("test").body("send new order");
         }
-        productRepo.update(product);
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
