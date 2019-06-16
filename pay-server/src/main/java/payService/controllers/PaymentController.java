@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import payService.domain.Transfer.IsCheck;
 import payService.domain.payment.Payment;
 import payService.domain.payment.PaymentDTO;
 import payService.domain.product.Product;
@@ -67,7 +68,7 @@ public class PaymentController {
         paymentRepo.save(payment);
 
         //reduce the amount of stock + order if necesary
-        restTemplate.postForObject("http://warehouse-service/product/stock", payment, Payment.class);
+        IsCheck check = restTemplate.postForObject("http://warehouse-service/product/stock", payment, IsCheck.class); //how to return bool or something
 
         return ResponseEntity.ok().build();
     }

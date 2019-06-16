@@ -1,28 +1,28 @@
-package payService.controllers;
+package orderService.controllers;
 
+import orderService.domain.order.Deliver;
+import orderService.domain.order.DeliverDTO;
+import orderService.repositories.DeliverRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-import payService.domain.product.Product;
-import payService.domain.product.ProductDTO;
-import payService.repositories.ProductRepo;
-
 import java.util.List;
+
 
 @RestController
 @Transactional
-@RequestMapping("/product")
-public class ProductController {
+@RequestMapping("/deliver")
+public class DeliverController {
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
-    ProductRepo productRepo;
+    DeliverRepo deliverRepo;
 
-    public ProductController()
+    public DeliverController()
     {
 
     }
@@ -30,43 +30,43 @@ public class ProductController {
     @GetMapping("/ping")
     public String item()
     {
-        return "welkom bij products";
+        return "welkom bij orders";
     }
 
     @GetMapping("/{productId}")
     @ResponseBody()
-    public Product getAccount(@PathVariable("productId") long id)
+    public Deliver getAccount(@PathVariable("productId") long id)
     {
-        return productRepo.find(id);
+        return deliverRepo.find(id);
     }
 
     @GetMapping()
     @ResponseBody()
-    public List<Product> getAccounts()
+    public List<Deliver> getAccounts()
     {
-        return productRepo.findAll();
+        return deliverRepo.findAll();
     }
 
     @PutMapping()
     @ResponseBody()
-    public ResponseEntity<String> update(@RequestBody ProductDTO dto) {
-        Product product = new Product(dto);
-        productRepo.update(product);
+    public ResponseEntity<String> update(@RequestBody DeliverDTO dto) {
+        Deliver deliver = new Deliver(dto);
+        deliverRepo.update(deliver);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping()
     @ResponseBody()
-    public ResponseEntity<String> save(@RequestBody ProductDTO dto) { //does not work (detached entity)
-        Product product = new Product(dto);
-        productRepo.save(product);
+    public ResponseEntity<String> save(@RequestBody DeliverDTO dto) {
+        Deliver deliver = new Deliver(dto);
+        deliverRepo.save(deliver);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     @ResponseBody()
     public ResponseEntity<String> delete(@PathVariable("id") long id) {
-        productRepo.delete(id);
+        deliverRepo.delete(id);
         return ResponseEntity.ok().build();
     }
 }

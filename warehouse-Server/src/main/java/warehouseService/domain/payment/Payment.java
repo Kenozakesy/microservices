@@ -3,23 +3,12 @@ package warehouseService.domain.payment;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
 public class Payment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(nullable=false, length=128)
     private long productId;
-
-    @Column(nullable=false, length=128)
     private double payment;
-
-    @Column(nullable=false, length=128)
     private int amount;
-
-    @Column(nullable=false, length=128)
     private Date paymentDate;
 
     public Payment() {

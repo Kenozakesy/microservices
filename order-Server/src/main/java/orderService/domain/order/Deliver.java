@@ -1,14 +1,9 @@
 package orderService.domain.order;
 
-import org.springframework.data.annotation.Id;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
 @Entity
-public class Order {
+public class Deliver { // is keyword should change
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,19 +11,19 @@ public class Order {
 
     @Column(nullable=false, length=128)
     private long productId;
-    
+
     @Column(nullable=false, length=128)
     private int amount;
 
     @Column(nullable=false, length=128)
     private boolean delivered;
 
-    public Order() {
+    public Deliver() {
     }
 
-    public Order(OrderDTO dto) {
+    public Deliver(DeliverDTO dto) {
         this.id = dto.getId();
-        this.productId = dto.getId();
+        this.productId = dto.getProductId();
         this.amount = dto.getAmount();
         this.delivered = dto.isDelivered();
     }
@@ -59,5 +54,15 @@ public class Order {
     }
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
+    }
+
+    @Override
+    public String toString() {
+        return "Deliver{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", amount=" + amount +
+                ", delivered=" + delivered +
+                '}';
     }
 }

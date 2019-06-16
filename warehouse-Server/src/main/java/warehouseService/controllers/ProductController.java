@@ -1,10 +1,13 @@
 package warehouseService.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import warehouseService.domain.Transfer.IsCheck;
+import warehouseService.domain.order.OrderDTO;
 import warehouseService.domain.payment.Payment;
 import warehouseService.domain.product.Product;
 import warehouseService.domain.product.ProductDTO;
@@ -13,6 +16,7 @@ import warehouseService.repositories.ProductRepo;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.validation.Valid;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 
@@ -69,9 +73,10 @@ public class ProductController {
     }
 
     @PostMapping("/stock")
-    @ResponseBody()
-    public void reduceStock(@RequestBody Payment payment) { //does not work (detached entity)
+    @ResponseBody
+    public IsCheck reduceStock(@RequestBody Payment payment) { //does not work (detached entity)
         Product product = productRepo.find(payment.getProductId());
+
         product.setAmount(product.getAmount() - payment.getAmount());
 
         double procent = (double) product.getAmount() / product.getMaxAmount() * 100;
@@ -79,8 +84,11 @@ public class ProductController {
 
         if(procent <= 20) {
             //order new product
-            restTemplate.postForObject("http://order-service/product/stock", payment, Payment.class);
+            OrderDTO order = new OrderDTO(payment.getProductId(), payment.getAmount());
+            restTemplate.postForObject("http://deliver-service/deliver", order, OrderDTO.class);
         }
+
+        return new IsCheck(false);
     }
 
     @DeleteMapping("/{id}")

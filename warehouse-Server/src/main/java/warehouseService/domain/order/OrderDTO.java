@@ -1,11 +1,17 @@
-package orderService.domain.order;
+package warehouseService.domain.order;
 
 public class OrderDTO {
 
     private int id;
-    private int productId;
+    private long productId;
     private int amount;
     private boolean delivered;
+
+    public OrderDTO(long productId, int amount) {
+        this.productId = productId;
+        this.amount = amount;
+        this.delivered = false;
+    }
 
     public int getId() {
         return id;
@@ -14,10 +20,10 @@ public class OrderDTO {
         this.id = id;
     }
 
-    public int getProductId() {
+    public long getProductId() {
         return productId;
     }
-    public void setProductId(int productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
@@ -34,6 +40,8 @@ public class OrderDTO {
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
     }
+
+
 
     @Override
     public String toString() {
