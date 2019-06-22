@@ -8,10 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import payService.domain.Transfer.IsCheck;
 import payService.domain.payment.Payment;
 import payService.domain.payment.PaymentDTO;
-import payService.domain.product.Product;
-import payService.domain.product.ProductDTO;
 import payService.repositories.PaymentRepo;
-import payService.repositories.ProductRepo;
 
 import java.util.List;
 
@@ -62,7 +59,7 @@ public class PaymentController {
     //user pays for a new product system sends message to warehouse-service
     @PostMapping()
     @ResponseBody()
-    public ResponseEntity<String> save(@RequestBody PaymentDTO dto) { //does not work (detached entity)
+    public IsCheck save(@RequestBody PaymentDTO dto) {
 
         Payment payment = new Payment(dto);
         paymentRepo.save(payment);
@@ -70,7 +67,7 @@ public class PaymentController {
         //reduce the amount of stock + order if necesary
         IsCheck check = restTemplate.postForObject("http://warehouse-service/product/stock", payment, IsCheck.class); //how to return bool or something
 
-        return ResponseEntity.ok().build();
+        return check;
     }
 
     @DeleteMapping("/{id}")

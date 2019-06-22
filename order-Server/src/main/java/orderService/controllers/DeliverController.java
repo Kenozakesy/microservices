@@ -30,7 +30,7 @@ public class DeliverController {
     @GetMapping("/ping")
     public String item()
     {
-        return "welkom bij orders";
+        return "welkom bij deliver";
     }
 
     @GetMapping("/{productId}")
@@ -55,11 +55,31 @@ public class DeliverController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/{id}")
+    @ResponseBody()
+    public ResponseEntity<String> updateDelivered(@PathVariable("id") long id) {
+        Deliver deliver = deliverRepo.find(id);
+
+        //can only accept order once
+        if(!deliver.isDelivered()) {
+            //here update product amount
+            restTemplate.put("http://warehouse-service/product/updateStock", deliver, Deliver.class); //this still has to be tested
+        }
+
+        deliver.setDelivered(true);
+        deliverRepo.update(deliver);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping()
     @ResponseBody()
     public ResponseEntity<String> save(@RequestBody DeliverDTO dto) {
-        Deliver deliver = new Deliver(dto);
-        deliverRepo.save(deliver);
+        //check if product order already exists
+        if(deliverRepo.isOrdered(dto.getProductId())) {
+            //only execute if order does not already exist
+            Deliver deliver = new Deliver(dto);
+            deliverRepo.save(deliver);
+        }
         return ResponseEntity.ok().build();
     }
 

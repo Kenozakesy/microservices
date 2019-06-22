@@ -2,6 +2,7 @@ package warehouseService.domain.product;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Entity
 public class Product {
@@ -14,11 +15,12 @@ public class Product {
     private String name;
 
     @Column(nullable=false, length=128)
-    private String price;
+    private double price;
 
     @Column(nullable=false, length=128)
     private int maxAmount;
 
+    @Min(value = 0, message = "should not be less than 18")
     @Column(nullable=false, length=128)
     private int amount;
 
@@ -47,10 +49,10 @@ public class Product {
         this.name = name;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

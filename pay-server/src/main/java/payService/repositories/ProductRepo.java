@@ -16,8 +16,8 @@ public class ProductRepo {
     private EntityManager em;
 
     public void save(Product product) { //not the best solution but manage able
-        em.merge(product);
-        //em.persist(product);
+        //em.merge(product);
+        em.persist(product);
     }
 
     public Product find(long id) {

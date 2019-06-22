@@ -1,21 +1,16 @@
 package warehouseService.domain.order;
-import javax.persistence.*;
 
-public class Order {
+public class DeliverDTO {
 
     private long id;
     private long productId;
     private int amount;
     private boolean delivered;
 
-    public Order() {
-    }
-
-    public Order(OrderDTO dto) {
-        this.id = dto.getId();
-        this.productId = dto.getId();
-        this.amount = dto.getAmount();
-        this.delivered = dto.isDelivered();
+    public DeliverDTO(long productId, int amount) {
+        this.productId = productId;
+        this.amount = amount;
+        this.delivered = false;
     }
 
     public long getId() {
@@ -44,5 +39,15 @@ public class Order {
     }
     public void setDelivered(boolean delivered) {
         this.delivered = delivered;
+    }
+
+    @Override
+    public String toString() {
+        return "DeliverDTO{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", amount=" + amount +
+                ", delivered=" + delivered +
+                '}';
     }
 }

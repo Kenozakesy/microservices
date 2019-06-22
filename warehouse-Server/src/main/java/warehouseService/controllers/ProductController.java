@@ -7,16 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import warehouseService.domain.Transfer.IsCheck;
-import warehouseService.domain.order.OrderDTO;
+import warehouseService.domain.order.Deliver;
+import warehouseService.domain.order.DeliverDTO;
 import warehouseService.domain.payment.Payment;
 import warehouseService.domain.product.Product;
 import warehouseService.domain.product.ProductDTO;
 import warehouseService.repositories.ProductRepo;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.validation.Valid;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 
@@ -64,9 +60,18 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/updateStock")
+    @ResponseBody()
+    public ResponseEntity<String> update(@RequestBody Deliver deliver) {
+        Product product = productRepo.find(deliver.getProductId());
+        product.setAmount(product.getAmount() + deliver.getAmount());
+        productRepo.update(product);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping()
     @ResponseBody()
-    public ResponseEntity<String> save(@RequestBody ProductDTO dto) { //does not work (detached entity)
+    public ResponseEntity<String> save(@RequestBody ProductDTO dto) {
         Product product = new Product(dto);
         productRepo.save(product);
         return ResponseEntity.ok().build();
@@ -74,21 +79,33 @@ public class ProductController {
 
     @PostMapping("/stock")
     @ResponseBody
-    public IsCheck reduceStock(@RequestBody Payment payment) { //does not work (detached entity)
+    public IsCheck reduceStock(@RequestBody Payment payment) {
+
         Product product = productRepo.find(payment.getProductId());
+        double totalpay = product.getPrice() * payment.getAmount();
 
-        product.setAmount(product.getAmount() - payment.getAmount());
+        //calculate payment here
+        if(payment.getPayment() >= totalpay) {
 
-        double procent = (double) product.getAmount() / product.getMaxAmount() * 100;
-        productRepo.update(product);
-
-        if(procent <= 20) {
-            //order new product
-            OrderDTO order = new OrderDTO(payment.getProductId(), payment.getAmount());
-            restTemplate.postForObject("http://deliver-service/deliver", order, OrderDTO.class);
+            //reduce stock here
+            if(product.getAmount() - payment.getAmount() >= 0) {
+                product.setAmount(product.getAmount() - payment.getAmount());
+                productRepo.update(product);
+            } else {
+                return new IsCheck(false, "not enough products available", payment.getPayment());
+            }
+            //order more stock if neccesary
+            double procent = (double) product.getAmount() / product.getMaxAmount() * 100;
+            if(procent <= 20) {
+                //order new product
+                DeliverDTO order = new DeliverDTO(payment.getProductId(), product.getMaxAmount() - product.getAmount());
+                restTemplate.postForObject("http://deliver-service/deliver", order, DeliverDTO.class);
+            }
+            double refund = payment.getPayment() - totalpay;
+            return new IsCheck(true, "payment succeeded", refund);
+        } else {
+            return new IsCheck(false, "not enough money", payment.getPayment());
         }
-
-        return new IsCheck(false);
     }
 
     @DeleteMapping("/{id}")

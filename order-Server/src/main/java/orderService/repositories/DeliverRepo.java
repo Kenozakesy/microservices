@@ -23,8 +23,17 @@ public class DeliverRepo {
         return em.find(Deliver.class, id);
     }
 
+    public boolean isOrdered(long id) {
+        return em.createQuery("SELECT l FROM Deliver l" +
+                                " WHERE l.delivered = false" +
+                                " AND l.productId = :id ", Deliver.class)
+                .setParameter("id", id)
+                .getResultList().isEmpty();
+
+    }
+
     public List<Deliver> findAll() {
-        return em.createQuery("SELECT l FROM Order l", Deliver.class)
+        return em.createQuery("SELECT l FROM Deliver l", Deliver.class)
                 .getResultList();
     }
 

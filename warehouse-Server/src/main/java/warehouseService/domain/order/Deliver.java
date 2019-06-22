@@ -1,22 +1,28 @@
 package warehouseService.domain.order;
 
-public class OrderDTO {
+import javax.persistence.*;
 
-    private int id;
+public class Deliver { // is keyword should change
+
+    private long id;
     private long productId;
     private int amount;
     private boolean delivered;
 
-    public OrderDTO(long productId, int amount) {
-        this.productId = productId;
-        this.amount = amount;
-        this.delivered = false;
+    public Deliver() {
     }
 
-    public int getId() {
+    public Deliver(DeliverDTO dto) {
+        this.id = dto.getId();
+        this.productId = dto.getProductId();
+        this.amount = dto.getAmount();
+        this.delivered = dto.isDelivered();
+    }
+
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -41,11 +47,9 @@ public class OrderDTO {
         this.delivered = delivered;
     }
 
-
-
     @Override
     public String toString() {
-        return "OrderDTO{" +
+        return "Deliver{" +
                 "id=" + id +
                 ", productId=" + productId +
                 ", amount=" + amount +

@@ -1,9 +1,6 @@
 package payService.repositories;
 
-
 import payService.domain.payment.Payment;
-import payService.domain.product.Product;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
